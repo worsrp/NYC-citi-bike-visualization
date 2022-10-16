@@ -16,12 +16,16 @@ import java.io.IOException;
 public class final_project extends PApplet {
 
  public void setup() {
-
+    /* size commented out by preprocessor */;
+    background(0);
 }
 
  public void draw() {
+    rect(0,0,40,40);
 }
 
+
+  public void settings() { size(400, 400); }
 
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "final_project" };
