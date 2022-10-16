@@ -22,7 +22,7 @@ void setup() {
     mapScreenHeight = height;
     //Set framerate to 5
     frameRate(5);
-    table = loadTable("JC-202209-citibike-tripdata.csv","header");
+    table = loadTable("citibike052022.csv","header");
     st_lat = new float[table.getRowCount()];
     st_lon = new float[table.getRowCount()];
     en_lat = new float[table.getRowCount()];
@@ -38,6 +38,9 @@ void setup() {
 
 void draw() {
     image(backgroundMap, 0, 0, mapScreenWidth, mapScreenHeight);
+
+    //plot trip
+
     for(int i=0; i<st_lat.length; i++){
        // Converting geogrphical coordinates into (x, y) coordinates  
         float x1 = mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
@@ -47,17 +50,17 @@ void draw() {
         fill(0,255,100);
         ellipse(x1, y1, 5, 5);
     }
-    for(int i=0; i<st_lat.length; i++){
-       // Converting geogrphical coordinates into (x, y) coordinates  
-        float x2 = mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
-        float y2 = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
-       // Draw a circle
-        noStroke();
-        fill(255,100,0);
-        ellipse(x2, y2, 5, 5);
-    }
+    // for(int i=0; i<st_lat.length; i++){
+    //    // Converting geogrphical coordinates into (x, y) coordinates  
+    //     float x2 = mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
+    //     float y2 = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+    //    // Draw a circle
+    //     noStroke();
+    //     fill(255,100,0);
+    //     ellipse(x2, y2, 5, 5);
+    // }
 
-    //เทส1จุด
+    //test 1 point
 
     //     float x1 = mapScreenWidth*(st_lon[0]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
     //     float y1 = mapScreenHeight - mapScreenHeight*(st_lat[0]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
