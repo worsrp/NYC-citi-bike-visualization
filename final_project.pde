@@ -130,12 +130,10 @@ void draw() {
                                 translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
                                 if(current_time-(timestamp[i]*10) < 6){
                                     float box_height = density[i]*(30.0/5.0)*(current_time-(timestamp[i]*10));
-                                // float box_height = current_time-(timestamp[i]*10);
                                     println(box_height);
                                     box(boxSize, boxSize, box_height);
                                 }else{
                                     float box_height = density[i]*(30.0/4.0)*((10-(current_time-timestamp[i]*10)));
-                                // float box_height = current_time-(timestamp[i]*10);
                                     println(box_height);
                                     box(boxSize, boxSize, box_height);
                                 }
@@ -174,7 +172,6 @@ void draw() {
                         text(en_name[i],en_lon[i]+2-(width/2),en_lat[i]+5-(height/2));
                     }
                 }
-
             }else if(status=="Dense"){
 
                 stroke(255,100);
@@ -202,21 +199,6 @@ void draw() {
                         }
                     }
                 popMatrix();
-            //   pushMatrix();
-            //     translate(-width/2,-height/2,boxSize);
-            //         for(int i=0; i < width; i+=20){
-            //             pushMatrix();
-            //                 translate(i, 0, 0);
-            //                 for(int j=0; j < height; j+=20){
-            //                     pushMatrix();
-            //                         translate(0,j,0);
-            //                         box(boxSize, boxSize, 40);
-            //                     popMatrix();
-            //                 }
-            //             popMatrix();
-            //         }
-            //   popMatrix();
-
             }else if(status=="Start"){
 
                 for(int i=0; i<st_lat.length; i++){
@@ -288,21 +270,21 @@ void draw() {
     fill(255,255,0);
     rect(25,500,150,100,50);
     fill(0);
-    text(reset,100,575);
-
-    textFont(font,32);    
-    fill(255,200);
-    textAlign(RIGHT);
-    text("30/05/2022", 1180, 670);  
-    textFont(font,40);    
-    text(hour+" : "+minute, 1180, 720);    
-
     text(dense,100,575);
         
     fill(255,255,0);
     rect(25,650,150,100,50);
     fill(255,0,0);
     text(reset,100,725);
+
+    if(status=="All" || status=="Dense"){
+        textFont(font,32);    
+        fill(255,200);
+        textAlign(RIGHT);
+        text("30/05/2022", 1180, 670);  
+        textFont(font,40);    
+        text(hour+" : "+minute, 1180, 720);   
+    }
 
     //key
     if(keyPressed){
