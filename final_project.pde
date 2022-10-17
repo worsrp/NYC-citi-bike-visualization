@@ -1,5 +1,5 @@
 PImage backgroundMap;
-Table table;
+Table table,box_table;
 TableRow row;
 String url_map = "Newyork.png";
 
@@ -17,11 +17,15 @@ String status ;
 String all = "All", start = "Start", end = "End", reset = "Reset";
 float sizest = 0;
 
-float[] st_lat, st_lon, en_lat, en_lon; 
+float[] st_lat, st_lon, en_lat, en_lon, box_x, box_y, timestamp, density; 
 String[] st_name, en_name;
 
 float leftright = 0, updown = 0;
-
+int boxSize = 20;
+int started_time = 0;
+int ended_time = 1440;
+float current_time = 0;
+float speed = 1;
 
 float x;
 void setup() {
@@ -41,8 +45,9 @@ void setup() {
     font = createFont("Poppins Medium",40,true);
 
     //Set framerate to 5
-    frameRate(60);
+    frameRate(30);
     table = loadTable("processed_citibike052022.csv","header");
+    box_table = loadTable("box_citibike052022.csv","header");
 
     st_lat = new float[table.getRowCount()];
     st_lon = new float[table.getRowCount()];
@@ -62,6 +67,19 @@ void setup() {
         en_name[i] = row.getString("end_station_name");
     }
 
+    box_x = new float[box_table.getRowCount()];
+    box_y = new float[box_table.getRowCount()];
+    timestamp = new float[box_table.getRowCount()];
+    density = new float[box_table.getRowCount()];
+
+    for(int i=0; i < box_table.getRowCount(); i++){
+        row = box_table.getRow(i);
+        box_x[i] = row.getFloat("box_x");
+        box_y[i] = row.getFloat("box_y");
+        timestamp[i] = row.getFloat("timestamp");
+        density[i] = row.getFloat("density");
+    }
+
     x = 0;
 
 
@@ -79,14 +97,52 @@ void draw() {
     pushMatrix();
 
         translate(200,0,0);   
-
+        println(current_time);
         pushMatrix();
 
             translate(width/2,height/2,0);
             rotateX(PI*updown/(height*2));
-            rotateY(PI*leftright/(width*2));
+            rotateZ(PI*leftright/(width*2));
 
             image(backgroundMap, -width/2, -height/2,  mapScreenWidth, mapScreenHeight);
+              stroke(255,100);
+              noFill();
+              pushMatrix();
+               translate(-(width/2+10),-height/2,0);
+                for(int i=0; i<timestamp.length; i++){
+                    if(floor(current_time/10)==timestamp[i] && timestamp[i]*10<current_time+10){
+                        println(timestamp[i]);
+                        pushMatrix();
+                            translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
+                            if(current_time-(timestamp[i]*10) < 6){
+                                float box_height = density[i]*(30.0/5.0)*(current_time-(timestamp[i]*10));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                println(box_height);
+                                box(boxSize, boxSize, box_height);
+                            }else{
+                                float box_height = density[i]*(30.0/4.0)*((10-(current_time-timestamp[i]*10)));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                println(box_height);
+                                box(boxSize, boxSize, box_height);
+                            }
+                        popMatrix();
+                    }
+                }
+              popMatrix();
+            //   pushMatrix();
+            //     translate(-width/2,-height/2,boxSize);
+            //         for(int i=0; i < width; i+=20){
+            //             pushMatrix();
+            //                 translate(i, 0, 0);
+            //                 for(int j=0; j < height; j+=20){
+            //                     pushMatrix();
+            //                         translate(0,j,0);
+            //                         box(boxSize, boxSize, 40);
+            //                     popMatrix();
+            //                 }
+            //             popMatrix();
+            //         }
+            //   popMatrix();
 
             if(status=="All"){
 
@@ -198,19 +254,22 @@ void draw() {
     if(keyPressed){
         if (key == CODED) {
             if (keyCode == UP) {
-                updown += 30;
+                updown += 10;
             } else if (keyCode == DOWN) {
-                updown -= 30;
+                updown -= 10;
             } else if (keyCode == LEFT) {
-                leftright += 30;
+                leftright += 10;
             } else if (keyCode == RIGHT) {
-                leftright -= 30;
+                leftright -= 10;
             } 
             updown = constrain(updown,-height,height);
             leftright = constrain(leftright,-width,width);
         }
     }
-    
+
+    current_time += speed;
+    current_time = constrain(current_time,started_time,ended_time);
+    println("============================");
 }
 
 void mousePressed(){
