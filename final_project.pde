@@ -10,7 +10,7 @@ float mapGeoRight  = -73.885786;       // Longitude degree east
 float mapGeoTop    = 40.779157;       // Latitude degree north
 float mapGeoBottom = 40.645007;          // Latitude degree south
 
-float mapScreenWidth, mapScreenHeight;
+float mapScreenWidth, mapScreenHeight, scale=1;
 
 String status ;
 
@@ -21,7 +21,6 @@ float[] st_lat, st_lon, en_lat, en_lon;
 String[] st_name, en_name;
 
 float leftright = 0, updown = 0;
-
 
 float x;
 void setup() {
@@ -70,21 +69,23 @@ void setup() {
 void draw() {
     
     background(0);
-    
+
     //font set
 
     textFont(font,15);
     textAlign(LEFT);
-
+    
     pushMatrix();
 
-        translate(200,0,0);   
+        translate(200,0,0);
 
         pushMatrix();
 
             translate(width/2,height/2,0);
             rotateX(PI*updown/(height*2));
             rotateY(PI*leftright/(width*2));
+
+            scale(scale); 
 
             image(backgroundMap, -width/2, -height/2,  mapScreenWidth, mapScreenHeight);
 
@@ -226,5 +227,15 @@ void mousePressed(){
     if(( mouseX > 25 && mouseX < 175 && mouseY < 600 && mouseY > 500) && mousePressed){
             updown=0;
             leftright=0;
+            scale=1;
+    }
+}
+
+void mouseWheel(MouseEvent event) {
+    float e = event.getCount();
+    if(e==-1){
+        scale*=1.1;
+    }else if(e==1){
+        scale/=1.1;
     }
 }
