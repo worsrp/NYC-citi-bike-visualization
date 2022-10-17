@@ -28,6 +28,8 @@ int ended_time = 1440;
 float current_time = 0;
 float speed = 1;
 
+int hour,minute;
+
 float x;
 void setup() {
     size(1200, 800, P3D);
@@ -43,7 +45,7 @@ void setup() {
 
     //set font
 
-    font = createFont("Poppins Medium",40,true);
+    font = createFont("Poppins",24,true);
 
     //Set framerate to 5
     frameRate(30);
@@ -96,6 +98,8 @@ void draw() {
 
     textFont(font,15);
     textAlign(LEFT);
+    hour = floor(current_time/60);
+    minute = int(current_time-(floor(current_time/60)*60));
     
     pushMatrix();
 
@@ -284,6 +288,15 @@ void draw() {
     fill(255,255,0);
     rect(25,500,150,100,50);
     fill(0);
+    text(reset,100,575);
+
+    textFont(font,32);    
+    fill(255,200);
+    textAlign(RIGHT);
+    text("30/05/2022", 1180, 670);  
+    textFont(font,40);    
+    text(hour+" : "+minute, 1180, 720);    
+
     text(dense,100,575);
         
     fill(255,255,0);
