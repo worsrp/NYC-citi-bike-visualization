@@ -12,29 +12,36 @@ float mapGeoBottom = 40.645007;          // Latitude degree south
 
 float mapScreenWidth, mapScreenHeight;
 
+String status ;
+
+String all="All",start="Start",end="End";
+float sizest=0;
+
 float[] st_lat, st_lon, en_lat, en_lon, x_st, y_st, x_en, y_en; 
 String[] st_name, en_name;
 
+
+
 float x;
 void setup() {
-    size(1000, 800, P3D);
+    size(1200, 800, P3D);
     ellipseMode(CENTER);
     // rectMode(CENTER);
     smooth();
     backgroundMap = loadImage(url_map);
 
-    // Set map dimension to dispaly window's width and height
+    // Set map dimension to display window's width and height
 
-    mapScreenWidth  = width;
-    mapScreenHeight = height;
+    mapScreenWidth  = 1000;
+    mapScreenHeight = 800;
 
     //set font
 
-    font = createFont("Poppins",40,true);
+    font = createFont("Poppins Medium",40,true);
 
     //Set framerate to 5
     frameRate(60);
-    table = loadTable("citibike052022.csv","header");
+    table = loadTable("cleaned_citibike052022.csv","header");
 
     x_st = new float[table.getRowCount()];
     y_st = new float[table.getRowCount()];
@@ -59,6 +66,8 @@ void setup() {
     }
 
     x = 0;
+
+
 }
 
 void draw() {
@@ -68,92 +77,150 @@ void draw() {
     //font set
 
     textFont(font,15);
+    textAlign(LEFT);
 
-    image(backgroundMap, 0, 0,  mapScreenWidth, mapScreenHeight);
+    image(backgroundMap, 200, 0,  mapScreenWidth, mapScreenHeight);
+    rect(0,0,200,height);
 
-    //plot trip
+    if(status=="All"){
+        for(int i=0; i<st_lat.length; i++){
 
-    for(int i=0; i<st_lat.length; i++){//start
+            x_st[i] = (mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft))+200;
+            y_st[i] = mapScreenHeight - mapScreenHeight*(st_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
 
-       // Converting geogrphical coordinates into (x, y) coordinates  
+            noStroke();
+            fill(0,255,0);
+            ellipse(x_st[i], y_st[i], 5, 5);
+        }
 
-        x_st[i] = mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
-        y_st[i] = mapScreenHeight - mapScreenHeight*(st_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+        for(int i=0; i<st_lat.length; i++){
 
-       // Draw a circle
+            x_en[i] = (mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft))+200;
+            y_en[i] = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
 
-        noStroke();
-        // bike[i] = new Pointbike(x_st,y_st[i],color(0,255,100));
-        // bike[i].display();
-        // if((mouseX==int(x_st[i]) && mouseY==int(y_st[i])) || mousePressed){
-        //     println(mouseX+" " +mouseY);
-        //     println(x_st[i]+" "+y_st[i]);
-        //     fill(255,0,0);
-        //     text(st_name[i],x_st[i]+2,y_st[i]+5);
-        //     println(st_name[i]);
-        // }
-        fill(0,255,0);
-        ellipse(x_st[i], y_st[i], 5, 5);
-    }
-
-    for(int i=0; i<st_lat.length; i++){//end
-
-       // Converting geogrphical coordinates into (x, y) coordinates  
-
-        x_en[i] = mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
-        y_en[i] = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
-
-       // Draw a circle
-
-        noStroke();
-        fill(255,100,0);
-        ellipse(x_en[i], y_en[i], 5, 5);
-    }
-
-    //test 1 point
-
-    //     float x_st[i] = mapScreenWidth*(st_lon[0]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
-    //     float y_st[i] = mapScreenHeight - mapScreenHeight*(st_lat[0]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
-    //    // Draw a circle
-    //     noStroke();
-    //     fill(0,255,100);
-    //     ellipse(x_st, y_st[i], 5, 5);
-    //     float x_en[i] = mapScreenWidth*(en_lon[0]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
-    //     float y_en[i] = mapScreenHeight - mapScreenHeight*(en_lat[0]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
-    //    // Draw a circle
-    //     noStroke();
-    //     fill(255,100,0);
-    //     ellipse(x_en[i], y_en[i], 5, 5);
+            noStroke();
+            fill(255,100,0);
+            ellipse(x_en[i], y_en[i], 5, 5);
+        }
 
     //check mouse x,y
 
-    for(int i=0;i<x_st.length;i++){
-        if((dist(mouseX, mouseY, x_st[i], y_st[i])<=3)){
-            // println(mouseX+" " +mouseY);
-            // println(x_st[i]+" "+y_st[i]);
-            float size=6;
-            fill(255);
-            for(int j=0;j<st_name[i].length();j++){
-                size += textWidth(st_name[i].charAt(j));
+        for(int i=0;i<x_st.length;i++){
+            if((dist(mouseX, mouseY, x_st[i], y_st[i])<=3)){
+
+                float size=6;
+                fill(255);
+                for(int j=0;j<st_name[i].length();j++){
+                    size += textWidth(st_name[i].charAt(j));
+                }
+                rect(x_st[i]-1,y_st[i]-10,size,20);
+                fill(247,90,192);
+                text(st_name[i],x_st[i]+2,y_st[i]+5);
+
             }
-            rect(x_st[i]-1,y_st[i]-10,size,20);
-            fill(247,90,192);
-            text(st_name[i],x_st[i]+2,y_st[i]+5);
-            // println(st_name[i]);
-        }
-        if((dist(mouseX, mouseY, x_en[i], y_en[i])<=3)){
-            // println(mouseX+" " +mouseY);
-            // println(x_st[i]+" "+y_st[i]);
-            float size=6;
-            fill(255);
-            for(int j=0;j<en_name[i].length();j++){
-                size += textWidth(en_name[i].charAt(j));
+            if((dist(mouseX, mouseY, x_en[i], y_en[i])<=3)){
+
+                float size=6;
+                fill(255);
+                for(int j=0;j<en_name[i].length();j++){
+                    size += textWidth(en_name[i].charAt(j));
+                }
+                rect(x_en[i]-1,y_en[i]-10,size,20);
+                fill(247,90,192);
+                text(en_name[i],x_en[i]+2,y_en[i]+5);
+
+                }
             }
-            rect(x_en[i]-1,y_en[i]-10,size,20);
-            fill(247,90,192);
-            text(en_name[i],x_en[i]+2,y_en[i]+5);
-            // println(st_name[i]);
+
+        }else if(status=="Start"){
+            for(int i=0; i<st_lat.length; i++){
+
+                x_st[i] = (mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft))+200;
+                y_st[i] = mapScreenHeight - mapScreenHeight*(st_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+
+                noStroke();
+                fill(0,255,0);
+                ellipse(x_st[i], y_st[i], 5, 5);
+
+            }
+
+    //check mouse x,y
+
+            for(int i=0;i<x_st.length;i++){
+                if((dist(mouseX, mouseY, x_st[i], y_st[i])<=3)){
+
+                    float size=6;
+                    fill(255);
+                    for(int j=0;j<st_name[i].length();j++){
+                        size += textWidth(st_name[i].charAt(j));
+                    }
+                    rect(x_st[i]-1,y_st[i]-10,size,20);
+                    fill(247,90,192);
+                    text(st_name[i],x_st[i]+2,y_st[i]+5);
+
+                }
+            }
+        }else if(status=="End"){
+
+            for(int i=0; i<st_lat.length; i++){
+
+                x_en[i] = (mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft))+200;
+                y_en[i] = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+
+                noStroke();
+                fill(255,100,0);
+                ellipse(x_en[i], y_en[i], 5, 5);
+            }
+
+    //check mouse x,y
+
+            for(int i=0;i<x_st.length;i++){
+                if((dist(mouseX, mouseY, x_en[i], y_en[i])<=3)){
+
+                    float size=6;
+                    fill(255);
+                    for(int j=0;j<en_name[i].length();j++){
+                        size += textWidth(en_name[i].charAt(j));
+                    }
+                    rect(x_en[i]-1,y_en[i]-10,size,20);
+                    fill(247,90,192);
+                    text(en_name[i],x_en[i]+2,y_en[i]+5);
+
+                }
+            }
         }
-    }
+
+
+//tap for mode
+
+        textSize(60);
+        textAlign(CENTER);
+        fill(255,255,0);
+        rect(25,50,150,100,5);
+        fill(0);      
+        text(all,100,125);
+        
+
+        fill(255,255,0);
+        rect(25,200,150,100,5);
+        fill(0);
+        text(start,100,275);
+        
+        fill(255,255,0);
+        rect(25,350,150,100,5);
+        fill(0);
+        text(end,100,425);
+        
 }
 
+void mousePressed(){
+    if(( mouseX > 25 && mouseX < 175 && mouseY < 150 && mouseY > 50) && mousePressed){
+            status=all;
+    }
+    if(( mouseX > 25 && mouseX < 175 && mouseY < 300 && mouseY > 200) && mousePressed){
+            status=start;
+    }
+    if(( mouseX > 25 && mouseX < 175 && mouseY < 450 && mouseY > 350) && mousePressed){
+            status=end;
+    }
+}
