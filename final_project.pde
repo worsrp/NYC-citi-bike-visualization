@@ -17,7 +17,8 @@ String status ;
 String all = "All", start = "Start", end = "End", reset = "Reset";
 float sizest = 0;
 
-float[] st_lat, st_lon, en_lat, en_lon, box_x, box_y, timestamp, density; 
+float[] st_lat, st_lon, en_lat, en_lon, box_x, box_y, timestamp, density;
+color[] box_color;
 String[] st_name, en_name;
 
 float leftright = 0, updown = 0;
@@ -71,6 +72,7 @@ void setup() {
     box_y = new float[box_table.getRowCount()];
     timestamp = new float[box_table.getRowCount()];
     density = new float[box_table.getRowCount()];
+    box_color = new color[box_table.getRowCount()];
 
     for(int i=0; i < box_table.getRowCount(); i++){
         row = box_table.getRow(i);
@@ -78,6 +80,7 @@ void setup() {
         box_y[i] = row.getFloat("box_y");
         timestamp[i] = row.getFloat("timestamp");
         density[i] = row.getFloat("density");
+        box_color[i] = color(random(100,255),random(100,255),random(100,255),100);
     }
 
     x = 0;
@@ -107,13 +110,13 @@ void draw() {
             scale(scale); 
 
             image(backgroundMap, -width/2, -height/2,  mapScreenWidth, mapScreenHeight);
-              stroke(255,100);
-              noFill();
+              noStroke();
               pushMatrix();
                translate(-(width/2+10),-height/2,0);
                 for(int i=0; i<timestamp.length; i++){
                     if(floor(current_time/10)==timestamp[i] && timestamp[i]*10<current_time+10){
                         println(timestamp[i]);
+                        fill(box_color[i]);
                         pushMatrix();
                             translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
                             if(current_time-(timestamp[i]*10) < 6){
