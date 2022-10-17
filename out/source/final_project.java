@@ -32,6 +32,7 @@ float mapScreenWidth, mapScreenHeight;
 float[] st_lat, st_lon, en_lat, en_lon, x_st, y_st, x_en, y_en; 
 String[] st_name, en_name;
 
+float x;
  public void setup() {
     /* size commented out by preprocessor */;
     ellipseMode(CENTER);
@@ -49,11 +50,7 @@ String[] st_name, en_name;
     font = createFont("Poppins",40,true);
 
     //Set framerate to 5
-
-    frameRate(5);
-
-    //load data
-
+    frameRate(60);
     table = loadTable("citibike052022.csv","header");
 
     x_st = new float[table.getRowCount()];
@@ -78,15 +75,18 @@ String[] st_name, en_name;
         en_name[i] = row.getString("end_station_name");
     }
 
+    x = 0;
 }
 
  public void draw() {
+    // rotateX(PI*0.20);
+    background(0);
 
     //font set
 
     textFont(font,15);
 
-    image(backgroundMap, 0, 0, mapScreenWidth, mapScreenHeight);
+    image(backgroundMap, 0, 0,  mapScreenWidth, mapScreenHeight);
 
     //plot trip
 
@@ -175,7 +175,7 @@ String[] st_name, en_name;
 }
 
 
-  public void settings() { size(1000, 800);
+  public void settings() { size(1000, 800, P3D);
 smooth(); }
 
   static public void main(String[] passedArgs) {
