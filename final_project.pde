@@ -14,7 +14,7 @@ float mapScreenWidth, mapScreenHeight, scale=1;
 
 String status ;
 
-String all = "All", start = "Start", end = "End", reset = "Reset";
+String all = "All", start = "Start", end = "End", reset = "Reset", dense = "Dense"  ;
 float sizest = 0;
 
 float[] st_lat, st_lon, en_lat, en_lon, box_x, box_y, timestamp, density;
@@ -110,46 +110,35 @@ void draw() {
             scale(scale); 
 
             image(backgroundMap, -width/2, -height/2,  mapScreenWidth, mapScreenHeight);
-              noStroke();
-              pushMatrix();
-               translate(-(width/2+10),-height/2,0);
-                for(int i=0; i<timestamp.length; i++){
-                    if(floor(current_time/10)==timestamp[i] && timestamp[i]*10<current_time+10){
-                        println(timestamp[i]);
-                        fill(box_color[i]);
-                        pushMatrix();
-                            translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
-                            if(current_time-(timestamp[i]*10) < 6){
-                                float box_height = density[i]*(30.0/5.0)*(current_time-(timestamp[i]*10));
-                                // float box_height = current_time-(timestamp[i]*10);
-                                println(box_height);
-                                box(boxSize, boxSize, box_height);
-                            }else{
-                                float box_height = density[i]*(30.0/4.0)*((10-(current_time-timestamp[i]*10)));
-                                // float box_height = current_time-(timestamp[i]*10);
-                                println(box_height);
-                                box(boxSize, boxSize, box_height);
-                            }
-                        popMatrix();
-                    }
-                }
-              popMatrix();
-            //   pushMatrix();
-            //     translate(-width/2,-height/2,boxSize);
-            //         for(int i=0; i < width; i+=20){
-            //             pushMatrix();
-            //                 translate(i, 0, 0);
-            //                 for(int j=0; j < height; j+=20){
-            //                     pushMatrix();
-            //                         translate(0,j,0);
-            //                         box(boxSize, boxSize, 40);
-            //                     popMatrix();
-            //                 }
-            //             popMatrix();
-            //         }
-            //   popMatrix();
 
+            
             if(status=="All"){
+
+                stroke(255,100);
+                noFill();
+                pushMatrix();
+                translate(-(width/2+10),-height/2,0);
+                    for(int i=0; i<timestamp.length; i++){
+                        if(floor(current_time/10)==timestamp[i] && timestamp[i]*10<current_time+10){
+                            println(timestamp[i]);
+                            fill(box_color[i]);
+                            pushMatrix();
+                                translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
+                                if(current_time-(timestamp[i]*10) < 6){
+                                    float box_height = density[i]*(30.0/5.0)*(current_time-(timestamp[i]*10));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                    println(box_height);
+                                    box(boxSize, boxSize, box_height);
+                                }else{
+                                    float box_height = density[i]*(30.0/4.0)*((10-(current_time-timestamp[i]*10)));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                    println(box_height);
+                                    box(boxSize, boxSize, box_height);
+                                }
+                            popMatrix();
+                        }
+                    }
+                popMatrix();
 
                 for(int i=0; i<st_lat.length; i++){
                     noStroke();
@@ -181,6 +170,48 @@ void draw() {
                         text(en_name[i],en_lon[i]+2-(width/2),en_lat[i]+5-(height/2));
                     }
                 }
+
+            }else if(status=="Dense"){
+
+                stroke(255,100);
+                noFill();
+                pushMatrix();
+                translate(-(width/2+10),-height/2,0);
+                    for(int i=0; i<timestamp.length; i++){
+                        if(floor(current_time/10)==timestamp[i] && timestamp[i]*10<current_time+10){
+                            println(timestamp[i]);
+                            fill(box_color[i]);
+                            pushMatrix();
+                                translate(box_x[i]*boxSize, box_y[i]*boxSize, 0);
+                                if(current_time-(timestamp[i]*10) < 6){
+                                    float box_height = density[i]*(30.0/5.0)*(current_time-(timestamp[i]*10));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                    println(box_height);
+                                    box(boxSize, boxSize, box_height);
+                                }else{
+                                    float box_height = density[i]*(30.0/4.0)*((10-(current_time-timestamp[i]*10)));
+                                // float box_height = current_time-(timestamp[i]*10);
+                                    println(box_height);
+                                    box(boxSize, boxSize, box_height);
+                                }
+                            popMatrix();
+                        }
+                    }
+                popMatrix();
+            //   pushMatrix();
+            //     translate(-width/2,-height/2,boxSize);
+            //         for(int i=0; i < width; i+=20){
+            //             pushMatrix();
+            //                 translate(i, 0, 0);
+            //                 for(int j=0; j < height; j+=20){
+            //                     pushMatrix();
+            //                         translate(0,j,0);
+            //                         box(boxSize, boxSize, 40);
+            //                     popMatrix();
+            //                 }
+            //             popMatrix();
+            //         }
+            //   popMatrix();
 
             }else if(status=="Start"){
 
@@ -232,7 +263,7 @@ void draw() {
     //tap for mode
     fill(0);
     rect(0,0,200,height);
-    textSize(60);
+    textSize(55);
     textAlign(CENTER);
     fill(255,255,0);
     rect(25,50,150,100,50);
@@ -253,8 +284,13 @@ void draw() {
     fill(255,255,0);
     rect(25,500,150,100,50);
     fill(0);
-    text(reset,100,575);
+    text(dense,100,575);
         
+    fill(255,255,0);
+    rect(25,650,150,100,50);
+    fill(255,0,0);
+    text(reset,100,725);
+
     //key
     if(keyPressed){
         if (key == CODED) {
@@ -279,17 +315,26 @@ void draw() {
 
 void mousePressed(){
     if(( mouseX > 25 && mouseX < 175 && mouseY < 150 && mouseY > 50) && mousePressed){
+            current_time=0;
             status=all;
     }
     if(( mouseX > 25 && mouseX < 175 && mouseY < 300 && mouseY > 200) && mousePressed){
+            current_time=0;
             status=start;
     }
     if(( mouseX > 25 && mouseX < 175 && mouseY < 450 && mouseY > 350) && mousePressed){
+            current_time=0;
             status=end;
     }
     if(( mouseX > 25 && mouseX < 175 && mouseY < 600 && mouseY > 500) && mousePressed){
+            current_time=0;
+            status=dense;
+    }
+    if(( mouseX > 25 && mouseX < 175 && mouseY < 750 && mouseY > 650) && mousePressed){
+            status="";
             updown=0;
             leftright=0;
+            current_time=0;
             scale=1;
     }
 }
