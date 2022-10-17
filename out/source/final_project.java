@@ -59,7 +59,7 @@ float x;
 
     //Set framerate to 5
     frameRate(60);
-    table = loadTable("cleaned_citibike052022.csv","header");
+    table = loadTable("citibike052022.csv","header");
 
     x_st = new float[table.getRowCount()];
     y_st = new float[table.getRowCount()];
@@ -75,10 +75,10 @@ float x;
     // bike = new Pointbike[table.getRowCount()];
     for(int i=0;i<table.getRowCount();i++){
         row = table.getRow(i);
-        st_lat[i] = row.getFloat("start_lat");
-        st_lon[i] = row.getFloat("start_lng");
-        en_lat[i] = row.getFloat("end_lat");
-        en_lon[i] = row.getFloat("end_lng");
+        st_lat[i] = row.getFloat("start_y");
+        st_lon[i] = row.getFloat("start_x");
+        en_lat[i] = row.getFloat("end_y");
+        en_lon[i] = row.getFloat("end_x");
         st_name[i] = row.getString("start_station_name");
         en_name[i] = row.getString("end_station_name");
     }
@@ -99,17 +99,52 @@ float x;
 
     pushMatrix();
 
+<<<<<<< HEAD
         translate(200,0,0);   
 
         pushMatrix();
+=======
+        x_st[i] = mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
+        y_st[i] = mapScreenHeight - mapScreenHeight*(st_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+
+       // Draw a circle
+
+        noStroke();
+        // bike[i] = new Pointbike(x_st,y_st[i],color(0,255,100));
+        // bike[i].display();
+        // if((mouseX==int(x_st[i]) && mouseY==int(y_st[i])) || mousePressed){
+        //     println(mouseX+" " +mouseY);
+        //     println(x_st[i]+" "+y_st[i]);
+        //     fill(255,0,0);
+        //     text(st_name[i],x_st[i]+2,y_st[i]+5);
+        //     println(st_name[i]);
+        // }
+        fill(0,255,0);
+        ellipse(x_st[i], y_st[i], 5, 5);
+    }
+>>>>>>> 375cc1e (data processing)
 
             translate(width/2,height/2,0);
             rotateX(PI*updown/(height*2));
             rotateY(PI*leftright/(width*2));
 
+<<<<<<< HEAD
             image(backgroundMap, -width/2, -height/2,  mapScreenWidth, mapScreenHeight);
 
             if(status=="All"){
+=======
+       // Converting geogrphical coordinates into (x, y) coordinates  
+
+        x_en[i] = mapScreenWidth*(en_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft);
+        y_en[i] = mapScreenHeight - mapScreenHeight*(en_lat[i]-mapGeoBottom)/(mapGeoTop-mapGeoBottom);
+
+       // Draw a circle
+
+        noStroke();
+        fill(255,100,0);
+        ellipse(x_en[i], y_en[i], 5, 5);
+    }
+>>>>>>> 375cc1e (data processing)
 
                 for(int i=0; i<st_lat.length; i++){
                     x_st[i] = (mapScreenWidth*(st_lon[i]-mapGeoLeft)/(mapGeoRight-mapGeoLeft))-(width/2);

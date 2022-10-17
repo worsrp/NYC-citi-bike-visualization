@@ -58,10 +58,10 @@ void setup() {
     // bike = new Pointbike[table.getRowCount()];
     for(int i=0;i<table.getRowCount();i++){
         row = table.getRow(i);
-        st_lat[i] = row.getFloat("start_lat");
-        st_lon[i] = row.getFloat("start_lng");
-        en_lat[i] = row.getFloat("end_lat");
-        en_lon[i] = row.getFloat("end_lng");
+        st_lat[i] = row.getFloat("start_y");
+        st_lon[i] = row.getFloat("start_x");
+        en_lat[i] = row.getFloat("end_y");
+        en_lon[i] = row.getFloat("end_x");
         st_name[i] = row.getString("start_station_name");
         en_name[i] = row.getString("end_station_name");
     }
