@@ -3,8 +3,11 @@ TableRow row;
 
 PFont font;
 
-PImage backgroundMap;
+PImage backgroundMap, ping_st, ping_en;
 String url_map = "Newyork.png";
+String url_st = "ping1.png";
+String url_en = "ping.png";
+
 
 float mapScreenWidth, mapScreenHeight, scale=1;
 
@@ -32,6 +35,9 @@ void setup() {
     ellipseMode(CENTER);
     smooth();
     backgroundMap = loadImage(url_map);
+    ping_st = loadImage(url_st);
+    ping_en = loadImage(url_en);
+    
 
     // Set map dimension to display window's width and height
     mapScreenWidth  = 1000;
@@ -276,18 +282,18 @@ void get_end_name(int _idx) {
 void plot_start() {
     // this function is about plotting started points
     for(int i=0; i<st_lat.length; i++){
-        noStroke();
-        fill(0,255,0);
-        ellipse(st_lon[i]-(width/2), st_lat[i]-(height/2), 5, 5);
+        // noStroke();
+        // fill(0,255,0);
+        image(ping_st,st_lon[i]-(width/2), st_lat[i]-(height/2), 10, 10);
     }   
 }
 
 void plot_end() {
     // this function is about plotting ended points
     for(int i=0; i<st_lat.length; i++){
-        noStroke();
-        fill(255,100,0);
-        ellipse(en_lon[i]-(width/2), en_lat[i]-(height/2), 5, 5);
+        // noStroke();
+        // fill(255,100,0);
+        image(ping_en,en_lon[i]-(width/2), en_lat[i]-(height/2), 10, 10);
     }
 }
 
