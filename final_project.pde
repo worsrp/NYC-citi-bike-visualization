@@ -284,7 +284,7 @@ void plot_start() {
     for(int i=0; i<st_lat.length; i++){
         // noStroke();
         // fill(0,255,0);
-        image(ping_st,st_lon[i]-(width/2), st_lat[i]-(height/2), 10, 10);
+        image(ping_st, st_lon[i]-(width/2)-5, st_lat[i]-(height/2)-10, 10, 10);
     }   
 }
 
@@ -293,7 +293,7 @@ void plot_end() {
     for(int i=0; i<st_lat.length; i++){
         // noStroke();
         // fill(255,100,0);
-        image(ping_en,en_lon[i]-(width/2), en_lat[i]-(height/2), 10, 10);
+        image(ping_en, en_lon[i]-(width/2)-5, en_lat[i]-(height/2)-10, 10, 10);
     }
 }
 
